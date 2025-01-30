@@ -179,8 +179,13 @@ fn main() {
             println!("Running Calculations...");
             
             //Call the seive of eristathanos function
-            //let pngiResult = sieve_of_eratosthenes(pngi);
+            let pngiResult = sieve_of_eratosthenes(pngi);
+            for i in 2..pngiResult+1 {
+                if sieve_array[i] {
+                    println!("Yes, {}  is a prime number", i);
+                }
             }
+         }
             
         }
         
@@ -290,22 +295,40 @@ fn input_validation(q: )
         true
     }
   
-  /* Function to determine all prime numbers under n
+    //Function to determine all prime numbers under n
     fn sieve_of_eratosthenes(n: u32) -> Vec<u32> {
-        //Check input
-        if n < 2 {
-            return Vec::new();
-        }
-        
-        //Initialize vector for primes
-        let mut is_prime = vec![true; n + 1];
-        is_prime[0] = false;
-        is_prime[1] = true;
-        
-        squareRootOfN = n.sqrt();
-        
-        while (i != squareRootOfN) {
-            
-        }
+    
+    // Initialize Sieve Array with all elements initially set to True
+    let mut sieve_array = vec![true; n+1];
+
+    // Set arr[0] and arr[1] to false, because 0 and 1 are not prime
+    sieve_array[0] =  false;
+    sieve_array[1] = false;
+
+    // Mark all even numbers as false, except 2
+    for i in (4..n+1).step_by(2) {
+        sieve_array[i] = false;
     }
-   */  
+
+    // Traverse from 3 to square root of n
+    // If a number is prime, mark all its multiples except number itself as false
+    // Optimization : Check numbers only upto square root of n
+    let mut i = 3;
+    while i*i <= n+1 {
+        if sieve_array[i] {
+
+            // Mark all the multiples except number itself as false
+            // Optimization : start from i*i, because smaller multiples are already marked
+            // Optimization : use 2*i as step, because  we need to check only odd multiples
+            for j in (i*i..n+1).step_by(2*i) {
+                sieve_array[j] = false;
+            }
+        }
+        // We do not have to check even numbers.
+        // So, we increment i by 2
+        i+=2;
+    }
+
+    return sieve_array;
+    }
+    
